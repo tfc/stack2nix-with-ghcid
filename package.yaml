@@ -1,0 +1,26 @@
+name:                stack2nix-with-ghcid
+version:             0.1.0.0
+github:              "tfc/stack2nix-with-ghcid"
+license:             BSD3
+author:              "Foo"
+maintainer:          "foo@bar.com"
+copyright:           "lel"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/tfc/stack2nix-with-ghcid#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+
+executables:
+  stack2nix-with-ghcid-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
