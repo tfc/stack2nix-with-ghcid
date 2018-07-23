@@ -19,10 +19,20 @@ let
       };
 
   compiler = pkgs.haskell.packages.ghc843;
-  haskellPackages = import ./stack_lts_12_1.nix { inherit compiler pkgs; };
+  haskellPackages = (import ./stack_lts_12_1.nix { inherit compiler pkgs; }).override {
+    overrides = self: super: {
+      # This override is necessary because of https://github.com/input-output-hk/stack2nix/issues/85
+      inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa CoreServices;
+    };
+  };
+
 
   drv = haskellPackages.callPackage f {};
 
 in
 
-  if pkgs.lib.inNixShell then drv.env else drv
+  if pkgs.lib.inNixShell
+    then drv.env.overrideAttrs (oldAttrs: {
+      buildInputs = with pkgs.haskellPackages; [ ghcid hlint ] ++ oldAttrs.buildInputs;
+    })
+    else drv
